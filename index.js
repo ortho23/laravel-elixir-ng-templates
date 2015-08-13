@@ -5,19 +5,15 @@ var elixir        = require('laravel-elixir');
 
 elixir.extend('ngTemplates', function(source, output, options) {
 
-  var config = this;
+    var config = this;
 
-  source = source || config.assetsDir + 'templates/**/*.html';
-  output = output || config.assetsDir + 'js';
+    source = source || config.assetsPath + 'templates/**/*.html';
+    output = output || config.publicPath + 'templates';
 
-  gulp.task('ng-templates', function() {
-    gulp.src(source)
-      .pipe(templateCache(options))
-      .pipe(gulp.dest(output));
-  });
-
-  this.registerWatcher('ng-templates', source);
-
-  return this.queueTask('ng-templates');
+    new this.Task('ng-templates', function() {
+        return gulp.src(source)
+            .pipe(templateCache(options))
+            .pipe(gulp.dest(output));
+    }).watch(source);
 
 });
